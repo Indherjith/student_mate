@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import '../Components/pdf_service.dart';
+import '../email_service.dart';
 import '../students_provider.dart';
 import 'edit_student_page.dart';
 
@@ -10,13 +13,16 @@ class StudentDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final studentsProvider = Provider.of<StudentsProvider>(context);
+    final user = FirebaseAuth.instance.currentUser;
+    final userEmail = user?.email;
+
+    final studentProvider = Provider.of<StudentsProvider>(context);
     final updatedStudent =
-        studentsProvider.students.firstWhere((s) => s.id == student.id);
+        studentProvider.students.firstWhere((s) => s.id == student.id);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(student.name),
+        title: Text(updatedStudent.name),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -29,7 +35,6 @@ class StudentDetailsPage extends StatelessWidget {
             Text('Blood Group: ${updatedStudent.bloodGroup}'),
             const SizedBox(height: 16),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 ElevatedButton(
                   onPressed: () {
@@ -46,16 +51,34 @@ class StudentDetailsPage extends StatelessWidget {
                 const SizedBox(width: 8),
                 ElevatedButton(
                   onPressed: () {
-                    studentsProvider.deleteStudent(updatedStudent.id);
+                    studentProvider.deleteStudent(updatedStudent.id);
                     Navigator.pop(context);
                   },
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                  child: const Text(
-                    'Delete',
-                    style: TextStyle(color: Colors.white),
-                  ),
+                  child: const Text('Delete'),
                 ),
               ],
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () async {
+                final pdfService = PdfService();
+                final pdfData = await pdfService.createPdf(updatedStudent);
+
+                if (userEmail != null) {
+                  final emailService = EmailService();
+                  await emailService.sendEmail(userEmail, pdfData);
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('PDF sent to your email')),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                        content: Text('Unable to fetch current user email')),
+                  );
+                }
+              },
+              child: const Text('Get PDF'),
             ),
           ],
         ),
