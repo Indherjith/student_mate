@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "430042596283",
+    "project_id": "flutterauth-cbc7e",
+    "storage_bucket": "flutterauth-cbc7e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:430042596283:android:dda57572c29846b9007a9e",
+        "android_client_info": {
+          "package_name": "com.example.student_auth"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJMseL5jTUrOlbc2rljSnfr-6ebBhMHKo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:430042596283:android:66f4b4f0d6c45c00007a9e",
+        "android_client_info": {
+          "package_name": "com.example.student_mate"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJMseL5jTUrOlbc2rljSnfr-6ebBhMHKo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
